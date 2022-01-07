@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Linq;
 
 namespace ClickBytez.EF.Gateway.Core.Abstractions.Entities
 {
-    public class ExtendedEntity<TIdentityType> : IExtendedEntity<TIdentityType>
+    public abstract class ExtendedEntity<TIdentityType> : IExtendedEntity<TIdentityType>
         where TIdentityType : struct
     {
         private readonly TIdentityType createdBy = default;
@@ -39,12 +38,8 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions.Entities
             typeof(Guid?),
         };
 
-        protected Entity()
+        public Entity()
         {
-            if (ValidIdentityType.Any(type => type == typeof(TIdentityType)) is false)
-            {
-                throw new InvalidOperationException("Invalid Identity Type");
-            }
         }
 
         public TIdentityType Id { get; init; } = default;

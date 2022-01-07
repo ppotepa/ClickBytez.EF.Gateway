@@ -1,11 +1,12 @@
 ﻿using ClickBytez.EF.Gateway.API.Model;
+using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace ClickBytez.EF.Gateway.API
+namespace ClickBytez.EF.Gateway.API.Data
 {
     public class ApplicationContext : DbContext
     {
@@ -70,20 +71,21 @@ namespace ClickBytez.EF.Gateway.API
 
             entries.added.ForEach(added =>
             {
-                typeof(IExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<byte>.CreatedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(added, DateTime.Now);
-                typeof(IExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<byte>.CreatedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(added, Guid.NewGuid());
+                const BindingFlags PRIVATE_FIELD_BINDING_ATTRS = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.CreatedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(added, DateTime.Now);
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.CreatedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(added, Guid.NewGuid());
             });
 
             entries.modified.ForEach(modified =>
             {
-                typeof(IExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<byte>.ModifiedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(modified, DateTime.Now);
-                typeof(IExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<byte>.ModifiedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(modified, Guid.NewGuid());
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.ModifiedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(modified, DateTime.Now);
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.ModifiedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(modified, Guid.NewGuid());
             });
 
             entries.deleted.ForEach(deleted =>
             {
-                typeof(IExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<byte>.DeletedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(deleted, DateTime.Now);
-                typeof(IExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<byte>.DeletedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(deleted, Guid.NewGuid());
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.DeletedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(deleted, DateTime.Now);
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.DeletedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(deleted, Guid.NewGuid());
             });
 
             return base.SaveChanges();

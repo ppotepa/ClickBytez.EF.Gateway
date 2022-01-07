@@ -9,6 +9,8 @@ namespace ClickBytez.EF.Gateway.Core.Utilities
     public class CustomRoutingControllerModelConvention : IControllerModelConvention
     {
         private const string Controller = "Controller";
+        private const string DefaultRoute = "api/action/execute";
+
         private readonly IConfiguration _configuration;
         private readonly GatewayConfiguration _gatewayConfiguration;
 
@@ -22,11 +24,11 @@ namespace ClickBytez.EF.Gateway.Core.Utilities
         {
             if (controller.ControllerName.Equals(nameof(ActionController).Replace(Controller, string.Empty)))
             {
-                string RouteTemplate = _gatewayConfiguration.EndpointUrl ?? "api/action/execute";
+                string RouteTemplate = _gatewayConfiguration.EndpointUrl ?? DefaultRoute;
 
                 SelectorModel firstSelector = controller.Selectors[0];
 
-                if (firstSelector.AttributeRouteModel == null)
+                if (firstSelector.AttributeRouteModel is null)
                     firstSelector.AttributeRouteModel = new AttributeRouteModel();
 
                 firstSelector.AttributeRouteModel.Template = RouteTemplate;

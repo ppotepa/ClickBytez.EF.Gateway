@@ -1,52 +1,49 @@
-﻿using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
-using ClickBytez.EF.Gateway.Core.Configuration;
-using ClickBytez.EF.Gateway.Core.Extensions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ClickBytez.EF.Gateway.Core.Binders
+﻿namespace ClickBytez.EF.Gateway.Core.Binders
 {
-    public class GenericActionBinder : IModelBinder
+    public class GenericActionBinder
     {
-        private readonly IConfiguration configuration;
-        private readonly GatewayConfiguration gatewayConfiguration;
-        private static Type[] _availableEntities;
+        //private readonly IConfiguration configuration;
+        //private readonly GatewayConfiguration gatewayConfiguration;
+        //private readonly DbContext dbContext;
 
-        private static Type[] AvailableEntities
-        {
-            get
-            {
-                if (_availableEntities is null)
-                {
-                    _availableEntities = AppDomain.CurrentDomain
-                        .GetAssemblies()
-                        .SelectMany(assembly => assembly.GetTypes())
-                        .Where
-                        (
-                            type =>     type.GetInterfaces().Contains(typeof(IEntity)) 
-                                    &&  type.IsInterface is false 
-                                    &&  type.IsAbstract is false
-                                    &&  type.Namespace.Contains("ClickBytez.EF.Gateway") is false
-                        ).ToArray();
-                }
+        //public GenericActionBinder(IConfiguration configuration, DbContext dbContext)
+        //{
+        //    this.configuration = configuration;
+        //    this.gatewayConfiguration = configuration.GetGatewayConfiguration();
+        //    this.dbContext = dbContext;
+        //}
+        
 
-                return _availableEntities;
-            }
-        }
+        //public Task BindModelAsync(ModelBindingContext bindingContext)
+        //{
+        //    string actionTypeString = bindingContext.ValueProvider.GetValue("type").ToString();
+        //    string entityTypeJson = bindingContext.ValueProvider.GetValue("entity").ToString();
 
-        public GenericActionBinder(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-            this.gatewayConfiguration = configuration.GetGatewayConfiguration();
-        }
+        //    if (string.IsNullOrEmpty(actionTypeString))
+        //    {
+        //        throw new InvalidOperationException("Type cannot be empty.");
+        //    }
 
-        public Task BindModelAsync(ModelBindingContext bindingContext)
-        {
-            var entities = AvailableEntities;
-            return Task.CompletedTask;
-        }
+        //    string[] split = actionTypeString.Split(".");
+
+        //    if (split.Length != 2)
+        //    {
+        //        throw new InvalidOperationException("Invalid actionType String");
+        //    }
+
+        //    string actionType = split[0];
+        //    string entityName = split[1];
+
+        //    Type targetEntity = dbContext.Model
+        //                            .GetEntityTypes()
+        //                            .First(type => type.ClrType.Name.Equals(entityName, StringComparison.InvariantCultureIgnoreCase))
+        //                            .ClrType;
+
+        //    ActionType targetActionType = Enum.Parse<ActionType>(actionType, true);
+        //    IAction<IEntity> instance = ActionBase.CreateInstance(targetEntity, targetActionType);
+        //    bindingContext.Result = ModelBindingResult.Success(instance);
+
+        //    return Task.CompletedTask;
+        //}
     }
 }
