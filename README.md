@@ -3,7 +3,7 @@
 Very small PoC on how to implement Generic API Handler thats is responsible for creating, updating, deleting and reading entities using Entity Framework.
 
 example payload
-
+```json
 {
   "type": "create.user",
   "entity": {
@@ -11,3 +11,4 @@ example payload
     "surname": "Doe"
   }
 }
+```
