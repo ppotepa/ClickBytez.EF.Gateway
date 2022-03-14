@@ -22,10 +22,24 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
         [HttpPost]
         [Route(EMPTY_STRING)]
-        [Consumes("application/json")]        
+        [Consumes("application/json")]
         public object Execute(IAction<IEntity> action)
         {
-            context.Add(action.Entity);
+            if (action is ICreateEntityAction)
+            {
+                context.Add(action.Entity);
+            }
+
+            if (action is IUpdateEntityAction)
+            {
+
+                var id = action.Entity.Id;
+                var id2 = action.Entity["Name"];
+                var targetEntity = context.Find(action.Entity.GetType(), new[] { action.Entity["Id"] });
+
+                context.Update(action.Entity);
+            }    
+
             int resultCount = context.SaveChanges();
 
             return new

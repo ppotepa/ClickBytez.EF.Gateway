@@ -17,6 +17,7 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
             switch (actionType)
             {
                 case ActionType.Create: targetGenericType = typeof(CreateEntityAction<>).MakeGenericType(entityType); break;
+                case ActionType.Update: targetGenericType = typeof(UpdateEntityAction<>).MakeGenericType(entityType); break;
             }
 
             IAction<IEntity> resultActionInstance = Activator.CreateInstance(targetGenericType, new[] { entityToken }) as IAction<IEntity>;

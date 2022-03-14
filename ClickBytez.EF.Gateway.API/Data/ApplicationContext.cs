@@ -34,7 +34,7 @@ namespace ClickBytez.EF.Gateway.API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=efapiexperimental;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=efapiexperimental;Integrated Security=True;Connect Timeout=30;Encrypt=False;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -61,7 +61,7 @@ namespace ClickBytez.EF.Gateway.API.Data
             const BindingFlags PRIVATE_FIELD_BINDING_ATTRS = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
 
             ChangeTracker.DetectChanges();
-
+            
             var entries = new
             {
                 added = ChangeTracker.Entries().Where(entry => entry.State is EntityState.Added).Select(enry => enry.Entity as IEntity).ToList(),
@@ -69,23 +69,23 @@ namespace ClickBytez.EF.Gateway.API.Data
                 deleted = ChangeTracker.Entries().Where(entry => entry.State is EntityState.Deleted).Select(entry => entry.Entity as IEntity).ToList(),
             };
 
-            entries.added.ForEach(added =>
+            entries.added.ForEach(addedEntry =>
             {
                 const BindingFlags PRIVATE_FIELD_BINDING_ATTRS = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
-                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.CreatedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(added, DateTime.Now);
-                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.CreatedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(added, Guid.NewGuid());
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.CreatedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(addedEntry, DateTime.Now);
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.CreatedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(addedEntry, Guid.NewGuid());
             });
 
-            entries.modified.ForEach(modified =>
+            entries.modified.ForEach(modifiedEntry =>
             {
-                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.ModifiedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(modified, DateTime.Now);
-                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.ModifiedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(modified, Guid.NewGuid());
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.ModifiedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(modifiedEntry, DateTime.Now);
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.ModifiedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(modifiedEntry, Guid.NewGuid());
             });
 
-            entries.deleted.ForEach(deleted =>
+            entries.deleted.ForEach(deletedEntry =>
             {
-                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.DeletedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(deleted, DateTime.Now);
-                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.DeletedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(deleted, Guid.NewGuid());
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.DeletedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(deletedEntry, DateTime.Now);
+                typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.DeletedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(deletedEntry, Guid.NewGuid());
             });
 
             return base.SaveChanges();

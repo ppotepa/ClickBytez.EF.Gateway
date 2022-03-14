@@ -9,10 +9,10 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
          void Execute();
     }
 
-    //[JsonConverter(typeof(ActionJsonConverter))]
     public interface IAction<out TEntityType> : IAction
         where TEntityType : IEntity
     {
         TEntityType Entity {  get; }
+        
     }
 }

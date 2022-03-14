@@ -19,6 +19,12 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions.Entities
         public TIdentityType Id { get; init; } = default;
         public DateTime? ModifiedOn => modifiedOn;
         public TIdentityType ModifiedBy => modifiedBy;
+
+        object IEntity.Id
+        {
+            get => this.Id;
+            set => ((IEntity)this).Id = value;
+        }
     }
 
     public abstract class Entity<TIdentityType> : IEntity<TIdentityType>
@@ -43,5 +49,6 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions.Entities
         }
 
         public TIdentityType Id { get; init; } = default;
+        dynamic IEntity.Id { get; set; }
     }
 }

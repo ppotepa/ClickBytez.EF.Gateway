@@ -18,7 +18,7 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
             Entity = token.ToObject<TEntity>();
         }
 
-        public abstract ActionType Type { get; set; }
+        public abstract ActionType Type { get; }
         public TEntity Entity { get; set; }
 
         public void Execute()
@@ -31,7 +31,7 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
     {
     }
 
-    public class CreateEntityAction<TEntity> : ActionBase<TEntity>
+    public class CreateEntityAction<TEntity> : ActionBase<TEntity>, ICreateEntityAction
         where TEntity : IEntity, new()
     {
         public CreateEntityAction() : base() { }
@@ -40,7 +40,23 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
         public override ActionType Type
         {
             get => ActionType.Create;
-            set => _ = ActionType.Create;
         }
     }
+
+    public class UpdateEntityAction<TEntity> : ActionBase<TEntity>, IUpdateEntityAction
+        where TEntity : IEntity, new()
+    {
+        public UpdateEntityAction() : base() { }
+        public UpdateEntityAction(JToken token) : base(token) { }
+
+        public override ActionType Type
+        {
+            get => ActionType.Update;
+        }
+    }
+
+    public interface ICreateEntityAction { }
+    public interface IDeleteEntityAction { }
+    public interface IUpdateEntityAction { }
+
 }
