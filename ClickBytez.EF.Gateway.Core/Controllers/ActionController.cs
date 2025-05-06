@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Concurrent;
+using System.Linq.Expressions;
 
 namespace ClickBytez.EF.Gateway.Core.Controllers
 {
@@ -17,7 +18,6 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
         private readonly GatewayConfiguration _configuration = default;
         private DbContext context = default;
 
-        // Cache for DbSet types
         private static readonly ConcurrentDictionary<Type, object> DbSetCache = new();
 
         public ActionController(IConfiguration configuration)
@@ -31,6 +31,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
         public object Execute(IAction<IEntity> action)
         {
             object resultEntity = default;
+            int resultCount = 0;
 
             if (action is ICreateEntityAction)
             {
@@ -40,13 +41,15 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
             if (action is IReadEntityAction)
             {
-                var entityType = action.Entity.GetType();                
+                var entityType = action.Entity.GetType();
                 var dbSet = DbSetCache.GetOrAdd(entityType, type =>
                 {
-                    return context.GetType()
-                                  .GetMethod("Set", Type.EmptyTypes)
-                                  ?.MakeGenericMethod(type)
-                                  .Invoke(context, null);
+                    var methodInfo = context.GetType().GetMethod(nameof(context.Set), Type.EmptyTypes)?.MakeGenericMethod(type);
+                    var instance = Expression.Constant(context);
+                    var callExpression = Expression.Call(instance, methodInfo);
+                    var lambda = Expression.Lambda<Func<object>>(callExpression).Compile();
+
+                    return lambda();
                 });
 
                 resultEntity = dbSet;
@@ -54,20 +57,31 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
             if (action is IUpdateEntityAction)
             {
-                object id = action.Entity.Id;
-                object id2 = action.Entity["Name"];
-                object targetEntity = context.Find(action.Entity.GetType(), [action.Entity["Id"]]);
-
                 resultEntity = context.Update(action.Entity).Entity;
             }
 
-            int resultCount = context.SaveChanges();
-
-            return new
+            if (action is IDeleteEntityAction)
             {
-                recordCount = resultCount,
-                entity = resultEntity
-            };
+                resultEntity = context.Remove(action.Entity).Entity;
+                resultCount = context.SaveChanges();
+
+                return new
+                {
+                    recordCount = resultCount,
+                    entity = resultEntity,
+                    deleted = resultCount > 0
+                };
+            }
+            else
+            {
+                resultCount = context.SaveChanges();
+
+                return new
+                {
+                    resultCount = resultCount,
+                    entity = resultEntity
+                };
+            }
         }
 
         internal void UseContext(DbContext context)
