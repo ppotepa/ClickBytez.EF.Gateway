@@ -43,6 +43,18 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
         }
     }
 
+    public class ReadEntityAction<TEntity> : ActionBase<TEntity>, IReadEntityAction
+        where TEntity : IEntity, new()
+    {
+        public ReadEntityAction() : base() { }
+        public ReadEntityAction(JToken token) : base(token) { }
+
+        public override ActionType Type
+        {
+            get => ActionType.Read;
+        }
+    }
+
     public class UpdateEntityAction<TEntity> : ActionBase<TEntity>, IUpdateEntityAction
         where TEntity : IEntity, new()
     {
@@ -55,8 +67,20 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
         }
     }
 
+    public class DeleteEntityAction<TEntity> : ActionBase<TEntity>, IDeleteEntityAction
+        where TEntity : IEntity, new()
+    {
+        public DeleteEntityAction() : base() { }
+        public DeleteEntityAction(JToken token) : base(token) { }
+
+        public override ActionType Type
+        {
+            get => ActionType.Delete;
+        }
+    }
+
+    public interface IReadEntityAction { }
     public interface ICreateEntityAction { }
     public interface IDeleteEntityAction { }
     public interface IUpdateEntityAction { }
-
 }

@@ -1,14 +1,12 @@
-﻿using ClickBytez.EF.Gateway.API.Model;
+﻿using ClickBytez.EF.DemoStore.Context;
+using ClickBytez.EF.DemoStore.Model;
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
-namespace ClickBytez.EF.Gateway.API.Data
+namespace ClickBytez.EF.DemoStore
 {
-    public class ApplicationContext : DbContext
+    public class ReflectiveInMemoryContext : DbContext
     {
         private static IEnumerable<Type> Entities
         {
@@ -26,20 +24,20 @@ namespace ClickBytez.EF.Gateway.API.Data
         }
         private static IEnumerable<Type> _entities = default;
         public DbSet<User> Users { get; set; }
-
-        public ApplicationContext()
-        {
-
-        }
+        public DbSet<Address> Address { get; set; }
+        public DbSet<Article> Articles { get; set; }
+    
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=efapiexperimental;Integrated Security=True;Connect Timeout=30;Encrypt=False;");
+            optionsBuilder.UseInMemoryDatabase(nameof(ReflectiveInMemoryContext));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var extended = typeof(IExtendedEntity<Guid>);
+
+            DataSeed.Seed(modelBuilder);
 
             foreach (Type entity in Entities)
             {
@@ -54,6 +52,7 @@ namespace ClickBytez.EF.Gateway.API.Data
                 modelBuilder.Entity(entity).Property(extended.GetProperty(nameof(IExtendedEntity.ModifiedBy)).PropertyType, nameof(IExtendedEntity.ModifiedBy));
                 modelBuilder.Entity(entity).Property(extended.GetProperty(nameof(IExtendedEntity.ModifiedOn)).PropertyType, nameof(IExtendedEntity.ModifiedOn));
             }
+
         }
 
         public override int SaveChanges()

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31729.503
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClickBytez.EF.Gateway.API", "ClickBytez.EF.Gateway.API\ClickBytez.EF.Gateway.API.csproj", "{7CD42E12-2A39-4A52-97F9-AAA183AD9F9F}"
 EndProject
@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickBytez.EF.DemoStore", "ClickBytez.EF.DemoStore\ClickBytez.EF.DemoStore.csproj", "{B8AEDAF8-AEA5-4B68-BB1F-8EBB1E9644C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{B99EA726-2A84-47CE-985F-D8EB898E9E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B99EA726-2A84-47CE-985F-D8EB898E9E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B99EA726-2A84-47CE-985F-D8EB898E9E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8AEDAF8-AEA5-4B68-BB1F-8EBB1E9644C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8AEDAF8-AEA5-4B68-BB1F-8EBB1E9644C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8AEDAF8-AEA5-4B68-BB1F-8EBB1E9644C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8AEDAF8-AEA5-4B68-BB1F-8EBB1E9644C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,12 +10,12 @@ namespace ClickBytez.EF.Gateway.Core.Providers
     internal class InternalEntitiesProvider
     {
         private Type[] _availableEntities = default;
-        private readonly IConfiguration configuratoin;
+        private readonly IConfiguration configuration;
         private readonly GatewayConfiguration GateWayConfiguration;
 
         public InternalEntitiesProvider(IConfiguration configuration)
         {
-            this.configuratoin = configuration;
+            this.configuration = configuration;
             this.GateWayConfiguration = configuration.GetGatewayConfiguration();
         }
 

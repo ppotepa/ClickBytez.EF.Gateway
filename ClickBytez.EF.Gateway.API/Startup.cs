@@ -1,4 +1,4 @@
-using ClickBytez.EF.Gateway.API.Data;
+using ClickBytez.EF.DemoStore;
 using ClickBytez.EF.Gateway.Core.Configuration;
 using ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection;
 using ClickBytez.EF.Gateway.Core.Utilities;
@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using System;
 
 namespace ClickBytez.EF.Gateway.API
 {
@@ -22,8 +21,7 @@ namespace ClickBytez.EF.Gateway.API
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
             
@@ -32,7 +30,7 @@ namespace ClickBytez.EF.Gateway.API
                 .AddNewtonsoftJson()
                 .AddControllersAsServices();
 
-            services.UseEFGateway(typeof(ApplicationContext), Configuration);
+            services.UseEFGateway(typeof(ReflectiveInMemoryContext), Configuration);
             services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, ActionJsonOptions>();
 
             services.AddSwaggerGen(c =>

@@ -30,15 +30,19 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
                 context.Add(action.Entity);
             }
 
+            if (action is IReadEntityAction)
+            {
+                context.Add(action.Entity);
+            }
+
             if (action is IUpdateEntityAction)
             {
-
-                var id = action.Entity.Id;
-                var id2 = action.Entity["Name"];
-                var targetEntity = context.Find(action.Entity.GetType(), new[] { action.Entity["Id"] });
+                object id = action.Entity.Id;
+                object id2 = action.Entity["Name"];
+                object targetEntity = context.Find(action.Entity.GetType(), [action.Entity["Id"]]);
 
                 context.Update(action.Entity);
-            }    
+            }
 
             int resultCount = context.SaveChanges();
 

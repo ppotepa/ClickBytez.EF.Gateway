@@ -29,6 +29,9 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
             @this.AddTransient(typeof(ActionController), (provider) =>
             {
                 DbContext dbContext = provider.GetService(contextType) as DbContext;
+
+                dbContext.Database.EnsureCreated();
+
                 ActionController controller = ActivatorUtilities.CreateInstance(provider, typeof(ActionController)) as ActionController;
                 controller.UseContext(dbContext);
                 return controller;
