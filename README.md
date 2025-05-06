@@ -1,6 +1,6 @@
 # ClickBytez.EF.Gateway
 
-A lightweight Proof-of-Concept demonstrating a **Generic API Gateway** for performing CRUD operations on any EF Core entity via a single endpoint.
+A lightweight Proof-of-Concept demonstrating a **Generic API Gateway** for performing CRUD operations on any EF Core entity via a single endpoint ( in sort of Graphi API fashion )
 
 
 ## Overview
