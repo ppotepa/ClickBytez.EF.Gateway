@@ -208,7 +208,7 @@ _Response:_
 
 ## Extending
 
-1. **Add a new entity** class in `Core/Models` and include it in your `DbContext`.  
+1. **Add a new entity** class in `Models` and include it in your `DbContext`.  
 2. Update any mappings or configuration (e.g. Fluent API).  
 3. You can optionally override or hook into the generic handler (e.g. add custom business rules).  
 
@@ -226,3 +226,57 @@ Please follow the existing coding style and add tests for new functionality.
 
 This project is for demonstration purposes only.  
 _You may choose to apply an open-source license here (e.g. MIT)._
+
+
+# ClickBytez.EF.Gateway  
+
+A lightweight Proof-of-Concept demonstrating a **Generic API Gateway** for performing CRUD operations on any EF Core entity via a single endpoint.  
+
+This project is designed as a **Minimal API** with a **Generic API Handler**, aiming to simplify CRUD operations for EF Core entities. While it is intentionally minimalistic, it is also somewhat of a reinvention of the wheel, as it resembles the functionality of GraphQL or similar single-endpoint APIs.  
+
+---  
+
+## Table of Contents  
+
+- [Overview](#overview)  
+- [Features](#features)  
+- [Architecture](#architecture)  
+- [Getting Started](#getting-started)  
+ - [Prerequisites](#prerequisites)  
+ - [Installation](#installation)  
+ - [Configuration](#configuration)  
+- [Usage](#usage)  
+ - [Sample Payloads & Responses](#sample-payloads--responses)  
+- [Extending](#extending)  
+- [Contributing](#contributing)  
+- [License](#license)  
+
+---  
+
+## Overview  
+
+**ClickBytez.EF.Gateway** exposes a single HTTP endpoint that interprets a `"type"` (for action + entity) and an `"entity"` JSON payload, then routes your request through EF Core to:  
+
+- Create new records  
+- Read existing data  
+- Update records  
+- Soft-delete or hard-delete entries  
+
+This approach can be useful for:  
+
+- Rapid prototyping of data-driven microservices  
+- Building internal admin dashboards without writing separate controllers  
+- Exposing a headless-CMS style API for multiple entity types  
+- Integrating dynamic front-ends (e.g. no-code tools) with a single integration point  
+
+While this project is minimal and generic, it draws inspiration from tools like GraphQL by providing a single endpoint for multiple operations.  
+
+## Features  
+
+- **Minimal API**: Built with .NET 8's minimal API approach for simplicity and performance  
+- **Generic handler**: No per-entity controllers—just one API handler  
+- **Action routing** via a simple `"type": "<action>.<entityName>"` convention  
+- **Entity Framework Core** under the hood for data access  
+- **Extensible**: plug in new entities by adding them to your EF model  
+- **Soft-delete support** (optional)  
+- **Audit fields**: automatically track `CreatedOn`, `CreatedBy`, `ModifiedOn`, `DeletedOn`, etc.
