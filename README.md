@@ -66,4 +66,18 @@ Content-Type: application/json
 }
 ```
 
+
+## Basic Filtering Added (Work in Progress)
+
+You can now issue a query request that only uses dynamic filters, without example entity matching. For example:
+
+```json
+{
+  "type": "read.user",
+  "entity": {},
+  "filters": [
+    "name.contains(a)"
+  ]
+}
+
 > **Note:** This project is a work-in-progress. It’s intentionally minimal and lacks features like input validation, authentication, or complex querying. It’s more of a GraphQL-inspired experiment than a finished product.
