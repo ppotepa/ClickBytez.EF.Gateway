@@ -10,7 +10,7 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
 {
     internal class ActionFactory 
     {
-        internal static IAction<IEntity> CreateInternal(ActionType actionType, Type entityType,  JToken entityToken)
+        internal static IAction<IEntity> CreateInternal(ActionType actionType, Type entityType, JToken entityToken, JToken jFilters)
         {
             Type targetGenericType = default;
 
@@ -22,7 +22,7 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
                 case ActionType.Delete: targetGenericType = typeof(DeleteEntityAction<>).MakeGenericType(entityType); break;
             }
 
-            IAction<IEntity> resultActionInstance = Activator.CreateInstance(targetGenericType, new[] { entityToken }) as IAction<IEntity>;
+            IAction<IEntity> resultActionInstance = Activator.CreateInstance(targetGenericType, new[] { entityToken, jFilters }) as IAction<IEntity>;
             return resultActionInstance;
         }
 
@@ -30,13 +30,14 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
         {
             EntityAction action = new EntityAction(jObject["type"].Value<string>());
             JToken jEntity = jObject["entity"];
+            JToken jFilters = jObject["filters"];
 
             Type entityType = provider.AvailableEntities.FirstOrDefault
             (
                 entityType => entityType.Name.Equals(action.EntityName, StringComparison.OrdinalIgnoreCase)
             );
 
-            IAction<IEntity> targetInstance = CreateInternal(action.ActionType, entityType, jEntity);
+            IAction<IEntity> targetInstance = CreateInternal(action.ActionType, entityType, jEntity, jFilters);
             return targetInstance;
         }
     }

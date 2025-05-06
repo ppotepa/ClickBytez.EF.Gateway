@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace ClickBytez.EF.Gateway.Core.Controllers
 {
@@ -17,8 +19,6 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
         private const string EMPTY_STRING = "";
         private readonly GatewayConfiguration _configuration = default;
         private DbContext context = default;
-
-        private static readonly ConcurrentDictionary<Type, object> DbSetCache = new();
 
         public ActionController(IConfiguration configuration)
         {
@@ -41,18 +41,17 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
             if (action is IReadEntityAction)
             {
-                var entityType = action.Entity.GetType();
-                var dbSet = DbSetCache.GetOrAdd(entityType, type =>
+                Type entityType = action.Entity.GetType();
+
+                MethodInfo methodInfo = context.GetType().GetMethod(nameof(context.Set), Type.EmptyTypes)?.MakeGenericMethod(entityType);
+                IQueryable data = methodInfo?.Invoke(context, null) as IQueryable; 
+
+                resultEntity = data;
+
+                if (action.Filters.Any())
                 {
-                    var methodInfo = context.GetType().GetMethod(nameof(context.Set), Type.EmptyTypes)?.MakeGenericMethod(type);
-                    var instance = Expression.Constant(context);
-                    var callExpression = Expression.Call(instance, methodInfo);
-                    var lambda = Expression.Lambda<Func<object>>(callExpression).Compile();
-
-                    return lambda();
-                });
-
-                resultEntity = dbSet;
+                    resultEntity = (data as IQueryable).ApplyRequest(action.Filters);                    
+                }
             }
 
             if (action is IUpdateEntityAction)

@@ -32,7 +32,8 @@ namespace ClickBytez.EF.Gateway.Core.Converters
             this.provider = provider;
         }
 
-        public override IAction<IEntity> ReadJson(JsonReader reader, Type objectType, IAction<IEntity> existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override IAction<IEntity> ReadJson(JsonReader reader, Type objectType, IAction<IEntity> existingValue, 
+            bool hasExistingValue, JsonSerializer serializer)
         {
             JObject @object = JObject.Load(reader);
             IAction<IEntity> instance = ActionFactory.CreateInstance(@object, EntitiesProvider);

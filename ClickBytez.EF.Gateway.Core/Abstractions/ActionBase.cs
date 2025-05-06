@@ -1,5 +1,6 @@
 ﻿using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using ClickBytez.EF.Gateway.Core.Enumerations;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 
@@ -13,13 +14,15 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
             Entity = new TEntity();
         }
 
-        protected ActionBase(JToken token)
+        protected ActionBase(JToken token, JToken filters)
         {
             Entity = token.ToObject<TEntity>();
+            Filters = JsonConvert.DeserializeObject<string[]>(filters.ToString());
         }
 
         public abstract ActionType Type { get; }
         public TEntity Entity { get; set; }
+        public string[] Filters { get; set; }
 
         public void Execute()
         {
@@ -35,7 +38,7 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
         where TEntity : IEntity, new()
     {
         public CreateEntityAction() : base() { }
-        public CreateEntityAction(JToken token) : base(token) { }
+        public CreateEntityAction(JToken token, JToken filter) : base(token, filter) { }
 
         public override ActionType Type
         {
@@ -47,7 +50,7 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
         where TEntity : IEntity, new()
     {
         public ReadEntityAction() : base() { }
-        public ReadEntityAction(JToken token) : base(token) { }
+        public ReadEntityAction(JToken token, JToken filter) : base(token, filter) { }
 
         public override ActionType Type
         {
@@ -59,7 +62,7 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
         where TEntity : IEntity, new()
     {
         public UpdateEntityAction() : base() { }
-        public UpdateEntityAction(JToken token) : base(token) { }
+        public UpdateEntityAction(JToken token, JToken filter) : base(token, filter) { }
 
         public override ActionType Type
         {
@@ -71,7 +74,7 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
         where TEntity : IEntity, new()
     {
         public DeleteEntityAction() : base() { }
-        public DeleteEntityAction(JToken token) : base(token) { }
+        public DeleteEntityAction(JToken token, JToken filter) : base(token, filter) { }
 
         public override ActionType Type
         {
