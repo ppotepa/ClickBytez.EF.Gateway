@@ -4,8 +4,8 @@ namespace ClickBytez.EF.DemoStore.Model
 {
     public class User : ExtendedEntity<Guid>
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? Email { get; set; }
 

@@ -12,7 +12,6 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
     public interface IAction<out TEntityType> : IAction
         where TEntityType : IEntity
     {
-        TEntityType Entity {  get; }
-        
+        TEntityType Entity {  get; }        
     }
 }

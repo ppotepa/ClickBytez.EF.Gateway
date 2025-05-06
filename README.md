@@ -23,7 +23,8 @@ A lightweight Proof-of-Concept demonstrating a **Generic API Gateway** for perfo
 
 ## Overview
 
-**ClickBytez.EF.Gateway** exposes a single HTTP endpoint that interprets a `"type"` (for action + entity) and an `"entity"` JSON payload, then routes your request through EF Core to:
+**ClickBytez.EF.Gateway** exposes a single HTTP endpoint that interprets a `"type"` (for action + entity) and an `"entity"` JSON payload, 
+then routes your request through EF Core to:
 
 - Create new records  
 - Read existing data  
@@ -82,7 +83,7 @@ This approach can be useful for:
 
 ### Prerequisites
 
-- [.NET 6.0 SDK](https://dotnet.microsoft.com/download) (or later)  
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download) (or later)  
 - A SQL Server / PostgreSQL / SQLite database  
 - EF Core provider for your database  
 
