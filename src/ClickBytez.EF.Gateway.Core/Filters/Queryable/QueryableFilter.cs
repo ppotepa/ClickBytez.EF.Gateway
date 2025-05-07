@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace ClickBytez.EF.Gateway.Core.Extensions;
+namespace ClickBytez.EF.Gateway.Core.Filters.Queryable;
 
 public static class QueryableExtensions
 {
@@ -76,6 +76,16 @@ public static class QueryableExtensions
                 "gte" => Expression.GreaterThanOrEqual(memberExpression, constantExpression),
                 "lte" => Expression.LessThanOrEqual(memberExpression, constantExpression),
                 "eq" => Expression.Equal(memberExpression, constantExpression),
+
+                "!contains" => Expression.Not(Expression.Call(memberExpression, nameof(string.Contains), Type.EmptyTypes, constantExpression)),
+                "!startswith" => Expression.Not(Expression.Call(memberExpression, nameof(string.StartsWith), Type.EmptyTypes, constantExpression)),
+                "!endswith" => Expression.Not(Expression.Call(memberExpression, nameof(string.EndsWith), Type.EmptyTypes, constantExpression)),
+                "!gt" => Expression.LessThanOrEqual(memberExpression, constantExpression),
+                "!lt" => Expression.GreaterThanOrEqual(memberExpression, constantExpression),
+                "!gte" => Expression.LessThan(memberExpression, constantExpression),
+                "!lte" => Expression.GreaterThan(memberExpression, constantExpression),
+                "!eq" => Expression.Not(Expression.Equal(memberExpression, constantExpression)),
+
                 _ => throw new NotSupportedException($"Operator '{operatorName}' not supported")
             };
 

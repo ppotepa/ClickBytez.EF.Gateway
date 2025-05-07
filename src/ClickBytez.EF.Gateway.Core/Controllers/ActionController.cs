@@ -1,7 +1,7 @@
 ﻿using ClickBytez.EF.DemoStore;
 using ClickBytez.EF.Gateway.Core.Abstractions;
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
-using ClickBytez.EF.Gateway.Core.Extensions;
+using ClickBytez.EF.Gateway.Core.Filters.Queryable;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +26,6 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
         [HttpPost]
         [Route(EMPTY_STRING)]
-        [Consumes("application/json")]
         public object Execute(IAction<IEntity> action)
         {
             dynamic resultEntity = default;
