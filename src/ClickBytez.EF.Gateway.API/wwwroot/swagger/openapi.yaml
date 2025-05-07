@@ -12,9 +12,9 @@ paths:
        content:  
          application/json:  
            schema:  
-             $ref: '#/components/schemas/IEntity'  
+             $ref: '#/components/schemas/User'  
            examples:  
-             ReadUsersByName:  
+             BasicReadAction:  
                summary: Find users whose name contains "1"  
                value:  
                  type: "read.user"  
@@ -31,7 +31,7 @@ paths:
 
 components:  
  schemas:  
-   GraphQueryDto:  
+   BasicReadAction:  
      type: object  
      properties:  
        type:  
@@ -48,3 +48,54 @@ components:
      required:  
        - type  
        - filters
+   User:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int64
+          description: Unique user identifier
+        Name:
+          type: string
+        Surname:
+          type: string
+        DateOfBirth:
+          type: string
+          format: date
+        Email:
+          type: string
+          format: email
+        CreatedOn:
+          type: string
+          format: date-time
+        CreatedBy:
+          type: string
+        ModifiedOn:
+          type: string
+          format: date-time
+        ModifiedBy:
+          type: string
+        DeletedOn:
+          type: string
+          format: date-time
+          nullable: true
+        DeletedBy:
+          type: string
+          nullable: true
+        Addresses:
+          type: array
+          items:
+            #$ref: '#/components/schemas/Address'
+        Articles:
+          type: array
+          items:
+            #$ref: '#/components/schemas/Article'
+        Friends:
+          type: array
+          items:
+            #$ref: '#/components/schemas/User'
+      required:
+        - Id
+        - Name
+        - Surname
+        - Email
