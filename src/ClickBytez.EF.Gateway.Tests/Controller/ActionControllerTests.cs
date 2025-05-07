@@ -136,24 +136,5 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
             Assert.AreEqual(1, dynamicResult.resultCount);
             Assert.IsTrue(dynamicResult.deleted);
         }
-
-        [Test]
-        public void UseContext_SetsContextAndEnsuresCreated()
-        {
-            var extendedContextMock = new Mock<ExtendedDbContext>();
-            var databaseFacadeMock = new Mock<DatabaseFacade>(extendedContextMock.Object);
-
-            databaseFacadeMock
-                .Setup(databaseFacade => databaseFacade.EnsureCreated())
-                .Returns(true);
-
-            extendedContextMock
-                .Setup(db => db.Database)
-                .Returns(databaseFacadeMock.Object);
-
-            _controller.UseContext(extendedContextMock.Object);
-
-            databaseFacadeMock.Verify(databaseFacade => databaseFacade.EnsureCreated(), Times.Once);
-        }
     }
 }

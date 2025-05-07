@@ -1,4 +1,5 @@
-﻿using ClickBytez.EF.Gateway.Core.Abstractions;
+﻿using ClickBytez.EF.DemoStore;
+using ClickBytez.EF.Gateway.Core.Abstractions;
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using ClickBytez.EF.Gateway.Core.Configuration;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,13 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
     public class ActionController : ControllerBase
     {
         private const string EMPTY_STRING = "";
-        private readonly GatewayConfiguration _configuration = default;
+        private readonly IConfiguration _configuration;
+
         private DbContext context = default;
 
-        public ActionController(IConfiguration configuration, DbContext context)
+        public ActionController(IConfiguration configuration, ExtendedDbContext context)
         {
-            //_configuration = configuration.GetGatewayConfiguration();
+            this._configuration = configuration;
             this.context = context;
         }
 
@@ -73,8 +75,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
             throw new InvalidOperationException();
         }
-
-        [assembly: InternalsVisibleTo("MyProject.Tests")]
+        
         internal void UseContext(DbContext context)
         {
             this.context = context;
