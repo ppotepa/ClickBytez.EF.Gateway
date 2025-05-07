@@ -1,12 +1,11 @@
 using ClickBytez.EF.DemoStore;
 using ClickBytez.EF.Gateway.Core.Configuration;
+using ClickBytez.EF.Gateway.Core.Conventions;
 using ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection;
-using ClickBytez.EF.Gateway.Core.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

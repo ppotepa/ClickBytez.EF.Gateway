@@ -1,7 +1,7 @@
 ﻿using ClickBytez.EF.Gateway.Core.Abstractions;
 using ClickBytez.EF.Gateway.Core.Controllers;
+using ClickBytez.EF.Gateway.Core.Conventions;
 using ClickBytez.EF.Gateway.Core.Providers;
-using ClickBytez.EF.Gateway.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +36,7 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
                     DbContext dbContext = provider.GetService(contextType) as DbContext;
 
                     if(_dbCreated is false)
-                    {
+                    {                        
                         dbContext.Database.EnsureCreated();
                         _dbCreated = true;
                     }

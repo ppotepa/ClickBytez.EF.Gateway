@@ -4,7 +4,7 @@ using ClickBytez.EF.Gateway.Core.Extensions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 
-namespace ClickBytez.EF.Gateway.Core.Utilities
+namespace ClickBytez.EF.Gateway.Core.Conventions
 {
     public class CustomRoutingControllerModelConvention : IControllerModelConvention
     {
