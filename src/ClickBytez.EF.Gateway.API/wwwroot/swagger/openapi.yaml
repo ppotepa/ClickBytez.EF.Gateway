@@ -1,0 +1,50 @@
+﻿openapi: 3.1.0  
+info:  
+ title: Minimal Graph API  
+ version: v1  
+
+paths:  
+ /execute:  
+   post:  
+     summary: Execute a Minimal Graph API query  
+     requestBody:  
+       required: true  
+       content:  
+         application/json:  
+           schema:  
+             $ref: '#/components/schemas/IEntity'  
+           examples:  
+             ReadUsersByName:  
+               summary: Find users whose name contains "1"  
+               value:  
+                 type: "read.user"  
+                 entity: {}  
+                 filters:  
+                   - "name.contains(1)"  
+     responses:  
+       '200':  
+         description: successful execution  
+         content:  
+           application/json:  
+             schema:  
+               type: object  
+
+components:  
+ schemas:  
+   GraphQueryDto:  
+     type: object  
+     properties:  
+       type:  
+         type: string  
+         description: operation to perform, e.g. "read.user"  
+       entity:  
+         type: object  
+         description: payload object (may be empty)  
+       filters:  
+         type: array  
+         description: list of filter expressions  
+         items:  
+           type: string  
+     required:  
+       - type  
+       - filters

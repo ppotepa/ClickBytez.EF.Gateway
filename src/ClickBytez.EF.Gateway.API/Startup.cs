@@ -5,6 +5,7 @@ using ClickBytez.EF.Gateway.Core.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,16 +16,11 @@ namespace ClickBytez.EF.Gateway.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
+        public Startup(IConfiguration configuration) => Configuration = configuration;
         public IConfiguration Configuration { get; }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services
                 .AddMvcCore(options => options.Conventions.Add(new CustomRoutingControllerModelConvention(Configuration)))
                 .AddNewtonsoftJson()
@@ -39,24 +35,33 @@ namespace ClickBytez.EF.Gateway.API
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            
+            app.UseStaticFiles();
+
+            
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".yaml"] = "application/x-yaml";
+            provider.Mappings[".yml"] = "application/x-yaml";
+
+            app.UseStaticFiles(new StaticFileOptions
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClickBytez.EF.API v1"));
+                ContentTypeProvider = provider,                
+            });
+
+            if (env.IsDevelopment())
+            {                
+                app.UseSwaggerUI(c =>
+                {
+                    c.RoutePrefix = "swagger";
+                    c.SwaggerEndpoint("/swagger/openapi.yaml", "My API V1");
+                });
             }
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

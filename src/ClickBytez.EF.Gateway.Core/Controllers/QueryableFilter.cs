@@ -15,17 +15,18 @@ public static class QueryableExtensions
     {
         get
         {
-            if (_whereMethodInfo == null)
+            if (_whereMethodInfo != null)
             {
-                lock (_lock)
+                return _whereMethodInfo;
+            }
+
+            lock (_lock)
+            {
+                if (_whereMethodInfo == null)
                 {
-                    if (_whereMethodInfo == null)
-                    {
-                        _whereMethodInfo = typeof(Queryable)
-                            .GetMethods()
-                            .Where(m => m.Name == nameof(Enumerable.Where) && m.GetParameters().Length == 2)
-                            .First();
-                    }
+                    _whereMethodInfo = typeof(Queryable)
+                        .GetMethods()
+                        .First(m => m.Name == nameof(Enumerable.Where) && m.GetParameters().Length == 2);
                 }
             }
 
