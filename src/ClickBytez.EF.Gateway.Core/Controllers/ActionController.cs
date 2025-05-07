@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Concurrent;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace ClickBytez.EF.Gateway.Core.Controllers
@@ -22,7 +20,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
         public ActionController(IConfiguration configuration)
         {
-            _configuration = configuration.GetGatewayConfiguration();
+            //_configuration = configuration.GetGatewayConfiguration();
         }
 
         [HttpPost]
