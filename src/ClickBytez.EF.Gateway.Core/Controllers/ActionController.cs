@@ -83,6 +83,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
             }
         }
 
+        [assembly: InternalsVisibleTo("MyProject.Tests")]
         internal void UseContext(DbContext context)
         {
             this.context = context;
