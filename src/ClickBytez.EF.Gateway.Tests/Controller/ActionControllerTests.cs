@@ -111,7 +111,7 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
 
             var result = _controller.Execute(updateAction);
 
-            _dbContextMock.Verify(dbContext => dbContext.Update(TestsDbContext.UserToUpdate as IEntity), Times.Once);
+            _dbContextMock.Verify(dbContext => dbContext.Update(TestsDbContext.UserToUpdate), Times.Once);
             _dbContextMock.Verify(dbContext => dbContext.SaveChanges(), Times.Once);
 
             Assert.IsNotNull(result);
@@ -125,7 +125,7 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
             var deleteAction = new DeleteEntityAction(TestsDbContext.UserToDelete);
             var result = _controller.Execute(deleteAction);
 
-            _dbContextMock.Verify(dbContext => dbContext.Remove(TestsDbContext.UserToDelete as IEntity), Times.Once);
+            _dbContextMock.Verify(dbContext => dbContext.Remove(TestsDbContext.UserToDelete), Times.Once);
             _dbContextMock.Verify(dbContext => dbContext.SaveChanges(), Times.Once);
 
             Assert.IsNotNull(result);
