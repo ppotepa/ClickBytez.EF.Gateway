@@ -3,7 +3,7 @@ using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 using static ClickBytez.EF.Gateway.Tests.Controller.ActionControllerTests;
 
-namespace ClickBytez.EF.Gateway.Tests
+namespace ClickBytez.EF.Gateway.Tests.Shared
 {
     public class TestsDbContext : ExtendedDbContext
     {

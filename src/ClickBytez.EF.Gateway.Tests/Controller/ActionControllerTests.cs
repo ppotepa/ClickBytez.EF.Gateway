@@ -1,7 +1,7 @@
 using ClickBytez.EF.DemoStore;
-using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using ClickBytez.EF.Gateway.Core.Configuration;
 using ClickBytez.EF.Gateway.Core.Controllers;
+using ClickBytez.EF.Gateway.Tests.Shared;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Moq;
