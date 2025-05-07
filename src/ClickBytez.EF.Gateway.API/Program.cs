@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace ClickBytez.EF.Gateway.API
 {
-    public class Program
+    public static class Program
     {
         #region Methods
 

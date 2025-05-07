@@ -1,7 +1,7 @@
 ﻿using ClickBytez.EF.DemoStore;
 using ClickBytez.EF.Gateway.Core.Abstractions;
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
-using ClickBytez.EF.Gateway.Core.Configuration;
+using ClickBytez.EF.Gateway.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,8 +16,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
     {
         private const string EMPTY_STRING = "";
         private readonly IConfiguration _configuration;
-
-        private DbContext context = default;
+        private DbContext context;
 
         public ActionController(IConfiguration configuration, ExtendedDbContext context)
         {

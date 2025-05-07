@@ -30,24 +30,6 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions.Entities
     public abstract class Entity<TIdentityType> : IEntity<TIdentityType>
           where TIdentityType : struct
     {
-        private readonly Type[] ValidIdentityType = new[]
-        {
-            typeof(byte),
-            typeof(byte?),
-            typeof(short),
-            typeof(short?),
-            typeof(int),
-            typeof(int?),
-            typeof(long),
-            typeof(long?),
-            typeof(Guid),
-            typeof(Guid?),
-        };
-
-        public Entity()
-        {
-        }
-
         public TIdentityType Id { get; init; } = default;
         dynamic IEntity.Id { get; set; }
     }

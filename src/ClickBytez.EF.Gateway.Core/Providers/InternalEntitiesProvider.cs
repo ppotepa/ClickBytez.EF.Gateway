@@ -11,9 +11,8 @@ namespace ClickBytez.EF.Gateway.Core.Providers
     internal class InternalEntitiesProvider : IInternalEntitiesProvider
     {
         #region Fields
-
-        private readonly IConfiguration configuration;
-        private readonly GatewayConfiguration GateWayConfiguration;
+        
+        private readonly GatewayConfiguration _gateWayConfiguration;
         private Type[] _availableEntities = default;
 
         #endregion Fields
@@ -21,9 +20,8 @@ namespace ClickBytez.EF.Gateway.Core.Providers
         #region Constructors
 
         public InternalEntitiesProvider(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-            this.GateWayConfiguration = configuration.GetGatewayConfiguration();
+        {            
+            this._gateWayConfiguration = configuration.GetGatewayConfiguration();
         }
 
         public InternalEntitiesProvider() { }
@@ -44,9 +42,8 @@ namespace ClickBytez.EF.Gateway.Core.Providers
                         .Where
                         (
                             type => type.GetInterfaces().Contains(typeof(IEntity))
-                                    && type.IsInterface is false
-                                    && type.IsAbstract is false
-
+                                    && !type.IsInterface
+                                    && !type.IsAbstract
                         )
                         .ToArray();
                 }

@@ -11,6 +11,7 @@ namespace ClickBytez.EF.DemoStore
     public class ExtendedDbContext : DbContext
     {
         private static Type[] _entities;
+        const BindingFlags PRIVATE_FIELD_BINDING_ATTRS = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
 
         private static IEnumerable<Type> Entities
         {
@@ -49,8 +50,6 @@ namespace ClickBytez.EF.DemoStore
 
         public override int SaveChanges()
         {
-            const BindingFlags PRIVATE_FIELD_BINDING_ATTRS = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
-
             ChangeTracker.DetectChanges();
 
             var entries = new
@@ -62,8 +61,6 @@ namespace ClickBytez.EF.DemoStore
 
             entries.added.ForEach(addedEntry =>
             {
-                const BindingFlags PRIVATE_FIELD_BINDING_ATTRS = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
-
                 typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.CreatedOn)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(addedEntry, DateTime.Now);
                 typeof(ExtendedEntity<Guid>).GetField($"{nameof(IExtendedEntity<Guid>.CreatedBy)}", PRIVATE_FIELD_BINDING_ATTRS).SetValue(addedEntry, Guid.NewGuid());
             });

@@ -44,11 +44,10 @@ namespace ClickBytez.EF.Gateway.Core.Converters
             catch (JsonSerializationException)
             {
                 throw new JsonSerializationException("Failed to deserialize action.");
-                throw;
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-                throw; 
+                throw new InvalidOperationException("Something went wrong", ex);
             }
         }
 

@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
+namespace ClickBytez.EF.Gateway.Core.Extensions;
+
 public static class QueryableExtensions
 {
     private static MethodInfo _whereMethodInfo;
@@ -40,7 +42,7 @@ public static class QueryableExtensions
 
         Type elementType = source.ElementType;
         ParameterExpression parameter = Expression.Parameter(elementType, "x");
-        Expression? expressionBody = null;
+        Expression expressionBody = null;
 
         foreach (string filter in filters)
         {
@@ -53,7 +55,7 @@ public static class QueryableExtensions
             string operatorName = match.Groups["operator"].Value.ToLower();
             string rawValue = match.Groups["value"].Value.Trim('"');
 
-            PropertyInfo? propertyInfo = elementType.GetProperty(
+            PropertyInfo propertyInfo = elementType.GetProperty(
                 propertyName,
                 BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
@@ -87,15 +89,9 @@ public static class QueryableExtensions
 
         MethodInfo targetMethod = WhereMethodInfo.MakeGenericMethod(elementType);
 
-        Expression whereCallExpression = Expression.Call(null, targetMethod, [source.Expression, Expression.Quote(lambdaExpression)]);
+        // Fix for S3220 and S3878: Pass the arguments directly without array creation
+        Expression whereCallExpression = Expression.Call(null, targetMethod, source.Expression, Expression.Quote(lambdaExpression));
 
         return source.Provider.CreateQuery(whereCallExpression);
-    }
-
-    private static bool IsDefaultValue(object value)
-    {
-        Type type = value.GetType();
-        object? defaultValue = Activator.CreateInstance(type);
-        return value.Equals(defaultValue);
     }
 }

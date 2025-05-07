@@ -1,12 +1,8 @@
-using ClickBytez.EF.DemoStore;
 using ClickBytez.EF.Gateway.Core.Configuration;
 using ClickBytez.EF.Gateway.Core.Controllers;
-using ClickBytez.EF.Gateway.Core.Converters;
 using ClickBytez.EF.Gateway.Tests.Shared;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Moq;
-using Newtonsoft.Json;
 
 namespace ClickBytez.EF.Gateway.Tests.Controller
 {
