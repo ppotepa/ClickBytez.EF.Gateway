@@ -27,7 +27,6 @@ namespace ClickBytez.EF.DemoStore
                 return _entities;
             }
         }
-        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

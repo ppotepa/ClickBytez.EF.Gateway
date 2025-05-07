@@ -7,7 +7,7 @@ namespace ClickBytez.EF.Gateway.Core.Extensions
     {
         public static GatewayConfiguration GetGatewayConfiguration(this IConfiguration @object)
         {
-            IConfigurationSection section = @object.GetSection("GatewayConfiguration");
+            IConfigurationSection section = @object.GetSection(nameof(GatewayConfiguration));
             GatewayConfiguration config =  GatewayConfiguration.FromSection(section);
             return config;
         }

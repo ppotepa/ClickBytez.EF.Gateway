@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-
 public static class QueryableExtensions
 {
     private static MethodInfo _whereMethodInfo;

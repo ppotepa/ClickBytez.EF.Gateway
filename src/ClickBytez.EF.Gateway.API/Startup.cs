@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +28,8 @@ namespace ClickBytez.EF.Gateway.API
                 .AddControllersAsServices();
 
             services.UseEFGateway(typeof(ReflectiveInMemoryContext), Configuration);
+
+            services.AddTransient<ReflectiveInMemoryContext>();
             services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, ActionJsonOptions>();
 
             services.AddSwaggerGen(c =>

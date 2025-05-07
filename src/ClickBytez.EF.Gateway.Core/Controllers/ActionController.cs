@@ -1,7 +1,6 @@
 ﻿using ClickBytez.EF.Gateway.Core.Abstractions;
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using ClickBytez.EF.Gateway.Core.Configuration;
-using ClickBytez.EF.Gateway.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,9 +17,10 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
         private readonly GatewayConfiguration _configuration = default;
         private DbContext context = default;
 
-        public ActionController(IConfiguration configuration)
+        public ActionController(IConfiguration configuration, DbContext context)
         {
             //_configuration = configuration.GetGatewayConfiguration();
+            this.context = context;
         }
 
         [HttpPost]
@@ -37,6 +37,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
                 resultEntity = action.Entity;
                 resultCount = context.SaveChanges();
             }
+            
             if (action is IReadEntityAction)
             {
                 Type entityType = action.Entity.GetType();

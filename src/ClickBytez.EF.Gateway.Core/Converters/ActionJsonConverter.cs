@@ -25,7 +25,6 @@ namespace ClickBytez.EF.Gateway.Core.Converters
 
                 return _entitiesProvider;
             }
-
         }
 
         public ActionJsonConverter(IServiceProvider provider)

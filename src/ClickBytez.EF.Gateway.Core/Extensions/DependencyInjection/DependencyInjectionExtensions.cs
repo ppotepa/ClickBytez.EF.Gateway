@@ -1,4 +1,5 @@
-﻿using ClickBytez.EF.Gateway.Core.Controllers;
+﻿using ClickBytez.EF.Gateway.Core.Abstractions;
+using ClickBytez.EF.Gateway.Core.Controllers;
 using ClickBytez.EF.Gateway.Core.Providers;
 using ClickBytez.EF.Gateway.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
     {
         public static IServiceCollection UseEFGateway(this IServiceCollection @this, Type contextType, IConfiguration configuration)
         {
-            @this.AddSingleton<InternalEntitiesProvider>();
+            @this.AddSingleton<IInternalEntitiesProvider, InternalEntitiesProvider>();
 
             @this.AddMvc(options =>
             {
