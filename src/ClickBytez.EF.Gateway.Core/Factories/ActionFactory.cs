@@ -37,6 +37,12 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
                 entityType => entityType.Name.Equals(action.EntityName, StringComparison.OrdinalIgnoreCase)
             );
 
+
+            if(entityType is null)
+            {
+                throw new InvalidOperationException($"Entity type {action.EntityName} not found.");
+            }
+
             IAction<IEntity> targetInstance = CreateInternal(action.ActionType, entityType, jEntity, jFilters);
             return targetInstance;
         }

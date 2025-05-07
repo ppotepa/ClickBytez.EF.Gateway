@@ -32,12 +32,24 @@ namespace ClickBytez.EF.Gateway.Core.Converters
             this.provider = provider;
         }
 
-        public override IAction<IEntity> ReadJson(JsonReader reader, Type objectType, IAction<IEntity> existingValue, 
+        public override IAction<IEntity> ReadJson(JsonReader reader, Type objectType, IAction<IEntity> existingValue,
             bool hasExistingValue, JsonSerializer serializer)
         {
-            JObject @object = JObject.Load(reader);
-            IAction<IEntity> instance = ActionFactory.CreateInstance(@object, EntitiesProvider);
-            return instance;
+            try
+            {
+                JObject @object = JObject.Load(reader);
+                IAction<IEntity> instance = ActionFactory.CreateInstance(@object, EntitiesProvider);
+                return instance;
+            }
+            catch (JsonSerializationException)
+            {
+                throw new JsonSerializationException("Failed to deserialize action.");
+                throw;
+            }
+            catch (InvalidOperationException)
+            {
+                throw; 
+            }
         }
 
         public override void WriteJson(JsonWriter writer, IAction<IEntity> value, JsonSerializer serializer)

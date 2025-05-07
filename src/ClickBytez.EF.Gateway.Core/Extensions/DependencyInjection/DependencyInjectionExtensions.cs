@@ -28,14 +28,21 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
 
             @this.AddTransient(typeof(ActionController), (provider) =>
             {
-                DbContext dbContext = provider.GetService(contextType) as DbContext;
-                ActionController controller = ActivatorUtilities.CreateInstance(provider, typeof(ActionController)) as ActionController;
-                controller.UseContext(dbContext);
-                return controller;
+                try
+                {
+                    DbContext dbContext = provider.GetService(contextType) as DbContext;
+                    ActionController controller = ActivatorUtilities.CreateInstance(provider, typeof(ActionController)) as ActionController;
+                    controller.UseContext(dbContext);
+
+                    return controller;
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("Failed to create ActionController instance.", ex);
+                }
             });
 
             return @this;
-
         }
     }
 }
