@@ -18,4 +18,3 @@ using System.Runtime.InteropServices;
 [assembly: Guid("85c1d78e-94b3-4b86-9d8b-a96bac301ddc")]
 
 [assembly: InternalsVisibleTo("ClickBytez.EF.Gateway.Tests")]
-

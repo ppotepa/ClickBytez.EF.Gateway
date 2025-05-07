@@ -5,9 +5,9 @@ namespace ClickBytez.EF.Gateway.Core.Configuration
 {
     public class GatewayConfiguration
     {
-        public string EndpointUrl { get; private set; }
-        public string ModelsNamespace { get; private set; }
-        public bool? UseModelDll { get; private set; }
+        public string EndpointUrl { get; internal set; }
+        public string ModelsNamespace { get; internal set; }
+        public bool? UseModelDll { get; internal set; }
 
         internal static GatewayConfiguration FromSection(IConfigurationSection section)
         {

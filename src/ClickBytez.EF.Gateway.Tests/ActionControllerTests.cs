@@ -1,6 +1,7 @@
 using ClickBytez.EF.DemoStore;
 using ClickBytez.EF.Gateway.Core.Abstractions;
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
+using ClickBytez.EF.Gateway.Core.Configuration;
 using ClickBytez.EF.Gateway.Core.Controllers;
 using ClickBytez.EF.Gateway.Core.Enumerations;
 using Microsoft.EntityFrameworkCore;
@@ -84,7 +85,27 @@ namespace ClickBytez.EF.Gateway.Tests
         [SetUp]
         public void Setup()
         {
+            var mockSection = new Mock<IConfigurationSection>();
+
+            var gatewayConfiguration = new GatewayConfiguration
+            {
+                EndpointUrl = "/",
+                ModelsNamespace = "ClickBytez.EF.Models",
+                UseModelDll = true
+            };
+
             _mockConfiguration = new Mock<IConfiguration>();
+
+            _mockConfiguration.Setup(configuration => configuration.GetSection(It.IsAny<string>())).Returns((string key) =>
+            {  
+                mockSection.Setup(section => section[It.IsAny<string>()]).Returns("/");
+                mockSection.Setup(section => section[nameof(GatewayConfiguration.ModelsNamespace)]).Returns("ClickBytez.EF.Models");
+                mockSection.Setup(section => section[nameof(GatewayConfiguration.UseModelDll)]).Returns("true");
+                mockSection.Setup(section => section.Get<GatewayConfiguration>()).Returns(gatewayConfiguration);
+                return mockSection.Object;
+            });
+
+            _mockConfiguration.Setup(configuration => configuration.GetSection(It.IsAny<string>())).Returns(mockSection.Object);
             _mockDbContext = new Mock<DbContext>();
 
             var mockDbSet = new Mock<DbSet<TestEntity>>();
@@ -93,8 +114,7 @@ namespace ClickBytez.EF.Gateway.Tests
             {
                 new TestEntity { Id = 1, Name = "Test Entity 1" },
                 new TestEntity { Id = 2, Name = "Test Entity 2" }
-            }
-            .AsQueryable();
+            }.AsQueryable();
 
             mockDbSet.As<IQueryable<TestEntity>>().Setup(m => m.Provider).Returns(data.Provider);
             mockDbSet.As<IQueryable<TestEntity>>().Setup(m => m.Expression).Returns(data.Expression);
@@ -200,6 +220,7 @@ namespace ClickBytez.EF.Gateway.Tests
 
             _mockDbContext.Verify(m => m.Remove(entity), Times.Once);
             _mockDbContext.Verify(m => m.SaveChanges(), Times.Once);
+
             Assert.IsNotNull(result);
             dynamic dynamicResult = result;
             Assert.AreEqual(entity, dynamicResult.entity);
