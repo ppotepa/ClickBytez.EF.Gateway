@@ -32,9 +32,7 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
                 try
                 {
                     DbContext dbContext = provider.GetService(contextType) as DbContext;
-                    ActionController controller = ActivatorUtilities.CreateInstance(provider, typeof(ActionController)) as ActionController;
-                    controller.UseContext(dbContext);
-
+                    ActionController controller = ActivatorUtilities.CreateInstance(provider, typeof(ActionController), dbContext) as ActionController;                    
                     return controller;
                 }
                 catch (Exception ex)

@@ -16,7 +16,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
     {
         private const string EMPTY_STRING = "";
         private readonly IConfiguration _configuration;
-        private ExtendedDbContext context;
+        private readonly ExtendedDbContext context;
 
         public ActionController(IConfiguration configuration, DbContext context)
         {
@@ -73,12 +73,6 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
             };
 
             throw new InvalidOperationException();
-        }
-        
-        internal void UseContext(DbContext context)
-        {
-            this.context = context;
-            this.context.Database.EnsureCreated();
         }
     }
 }
