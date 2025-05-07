@@ -5,8 +5,34 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
+
 public static class QueryableExtensions
 {
+    private static MethodInfo _whereMethodInfo;
+    private static object _lock = new object();
+
+    private static MethodInfo WhereMethodInfo
+    {
+        get
+        {
+            if (_whereMethodInfo == null)
+            {
+                lock (_lock)
+                {
+                    if (_whereMethodInfo == null)
+                    {
+                        _whereMethodInfo = typeof(Queryable)
+                            .GetMethods()
+                            .Where(m => m.Name == nameof(Enumerable.Where) && m.GetParameters().Length == 2)
+                            .First();
+                    }
+                }
+            }
+
+            return _whereMethodInfo;
+        }
+    }
+
     public static IQueryable ApplyRequest(this IQueryable source, IEnumerable<string> filters)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
@@ -18,7 +44,8 @@ public static class QueryableExtensions
 
         foreach (string filter in filters)
         {
-            var match = Regex.Match(filter, @"^(?<property>\w+)\.(?<operator>\w+)\((?<value>.*)\)$");
+            Match match = Regex.Match(filter, @"^(?<property>\w+)\.(?<operator>\w+)\((?<value>.*)\)$");
+
             if (!match.Success)
                 throw new ArgumentException($"Invalid filter syntax: {filter}");
 
@@ -29,6 +56,7 @@ public static class QueryableExtensions
             PropertyInfo? propertyInfo = elementType.GetProperty(
                 propertyName,
                 BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
             if (propertyInfo == null)
                 throw new ArgumentException($"No property '{propertyName}' on {elementType.Name}");
 
@@ -57,21 +85,9 @@ public static class QueryableExtensions
 
         LambdaExpression lambdaExpression = Expression.Lambda(expressionBody, parameter);
 
-        //TODO: throws here for input
-        //{
-        //  "type": "read.user",
-        //  "entity":{},
-        //  "filters":["name.contains(a)"]
-        //}
-        //System.InvalidOperationException: 'Sequence contains more than one element'
+        MethodInfo targetMethod = WhereMethodInfo.MakeGenericMethod(elementType);
 
-        MethodInfo whereMethodInfo = typeof(Queryable)
-            .GetMethods()
-            .Where(m => m.Name == "Where" && m.GetParameters().Length == 2)
-            .First()
-            .MakeGenericMethod(elementType);
-
-        Expression whereCallExpression = Expression.Call(null, whereMethodInfo,[source.Expression, Expression.Quote(lambdaExpression)]);
+        Expression whereCallExpression = Expression.Call(null, targetMethod, [source.Expression, Expression.Quote(lambdaExpression)]);
 
         return source.Provider.CreateQuery(whereCallExpression);
     }
