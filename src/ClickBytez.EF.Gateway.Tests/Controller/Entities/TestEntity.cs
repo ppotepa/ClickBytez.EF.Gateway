@@ -6,7 +6,8 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
     {
         public class TestEntity : ExtendedEntity<Guid>
         {            
-            public string Name { get; set; }            
+            public string Name { get; set; }      
+            public int Age { get; set; }
         }
     }
 }

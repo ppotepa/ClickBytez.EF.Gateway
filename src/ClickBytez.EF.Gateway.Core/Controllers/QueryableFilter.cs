@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 public static class QueryableExtensions
 {
     private static MethodInfo _whereMethodInfo;
-    private static object _lock = new object();
+    private static readonly object _lock = new object();
 
     private static MethodInfo WhereMethodInfo
     {

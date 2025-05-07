@@ -28,15 +28,15 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
         [Consumes("application/json")]
         public object Execute(IAction<IEntity> action)
         {
-            object resultEntity = default;
+            dynamic resultEntity = default;
             int resultCount = 0;
 
             if (action is ICreateEntityAction)
             {
                 context.Add(action.Entity);
                 resultEntity = action.Entity;
+                resultCount = context.SaveChanges();
             }
-
             if (action is IReadEntityAction)
             {
                 Type entityType = action.Entity.GetType();
@@ -48,37 +48,29 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
                 if (action.Filters.Any())
                 {
-                    resultEntity = (data as IQueryable).ApplyRequest(action.Filters);                    
+                    resultEntity = data.ApplyRequest(action.Filters);
+                    resultCount = Queryable.Count(resultEntity);
                 }
             }
-
             if (action is IUpdateEntityAction)
             {
                 resultEntity = context.Update(action.Entity).Entity;
+                resultCount = context.SaveChanges();
             }
-
             if (action is IDeleteEntityAction)
             {
                 resultEntity = context.Remove(action.Entity).Entity;
                 resultCount = context.SaveChanges();
-
-                return new
-                {
-                    recordCount = resultCount,
-                    entity = resultEntity,
-                    deleted = resultCount > 0
-                };
             }
-            else
+
+            return new
             {
-                resultCount = context.SaveChanges();
+                resultCount = resultCount,
+                entity = resultEntity,
+                deleted = resultCount > 0
+            };
 
-                return new
-                {
-                    resultCount = resultCount,
-                    entity = resultEntity
-                };
-            }
+            throw new InvalidOperationException();
         }
 
         [assembly: InternalsVisibleTo("MyProject.Tests")]

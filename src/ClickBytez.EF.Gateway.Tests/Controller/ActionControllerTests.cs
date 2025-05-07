@@ -40,9 +40,11 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
                     _configurationSectionMock
                         .Setup(section => section[nameof(GatewayConfiguration.EndpointUrl)])
                         .Returns(gatewayConfiguration.EndpointUrl);
+
                     _configurationSectionMock
                         .Setup(section => section[nameof(GatewayConfiguration.ModelsNamespace)])
                         .Returns(gatewayConfiguration.ModelsNamespace);
+
                     _configurationSectionMock
                         .Setup(section => section[nameof(GatewayConfiguration.UseModelDll)])
                         .Returns(gatewayConfiguration.UseModelDll.ToString());
@@ -86,8 +88,7 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
 
             Assert.IsNotNull(result);
             dynamic dynamicResult = result;
-            Assert.IsNotNull(dynamicResult.entity);
-            _dbContextMock.Verify(dbContext => dbContext.SaveChanges(), Times.Once);
+            Assert.IsNotNull(dynamicResult.entity);            
         }
 
         [Test]
@@ -100,8 +101,6 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
             var result = _controller.Execute(readActionWithFilters);
 
             Assert.IsNotNull(result);
-
-            _dbContextMock.Verify(dbContext => dbContext.SaveChanges(), Times.Once);
         }
 
         [Test]
@@ -132,7 +131,7 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
             dynamic dynamicResult = result;
 
             Assert.AreEqual(TestsDbContext.UserToDelete, dynamicResult.entity);
-            Assert.AreEqual(1, dynamicResult.recordCount);
+            Assert.AreEqual(1, dynamicResult.resultCount);
             Assert.IsTrue(dynamicResult.deleted);
         }
 

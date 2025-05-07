@@ -1,7 +1,6 @@
 ﻿using ClickBytez.EF.DemoStore.Context;
 using ClickBytez.EF.DemoStore.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace ClickBytez.EF.DemoStore
 {
@@ -10,7 +9,6 @@ namespace ClickBytez.EF.DemoStore
         public DbSet<Address> Address { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<User> Users { get; set; }
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -26,13 +26,12 @@ namespace ClickBytez.EF.Gateway.Tests.Shared
             .Select(i => new TestEntity
             {
                 Id = Guid.NewGuid(),
-                Name = $"Test Entity {i}"
+                Name = $"Test Entity {i}",
+                Age = i + 10
             })
             .Append(UserToDelete)
             .Append(UserToUpdate)
             .ToArray();
-
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
