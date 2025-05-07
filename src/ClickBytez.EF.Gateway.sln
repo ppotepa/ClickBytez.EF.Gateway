@@ -10,7 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E7FA8132-51CB-46FB-B91C-6E00E341D7AD}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		README.md = README.md
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickBytez.EF.DemoStore", "ClickBytez.EF.DemoStore\ClickBytez.EF.DemoStore.csproj", "{B8AEDAF8-AEA5-4B68-BB1F-8EBB1E9644C6}"
