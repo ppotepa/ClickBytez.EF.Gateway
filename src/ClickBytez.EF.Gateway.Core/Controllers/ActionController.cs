@@ -16,12 +16,12 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
     {
         private const string EMPTY_STRING = "";
         private readonly IConfiguration _configuration;
-        private DbContext context;
+        private ExtendedDbContext context;
 
         public ActionController(IConfiguration configuration, DbContext context)
         {
             this._configuration = configuration;
-            this.context = context;
+            this.context = context as ExtendedDbContext;
         }
 
         [HttpPost]
