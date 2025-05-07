@@ -2,6 +2,7 @@
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection;
 using ClickBytez.EF.Gateway.Core.Providers;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,15 +12,15 @@ namespace ClickBytez.EF.Gateway.Core.Converters
     public class ActionJsonConverter : JsonConverter<IAction<IEntity>>
     {
         private readonly IServiceProvider provider;
-        private InternalEntitiesProvider _entitiesProvider;
+        private IInternalEntitiesProvider _entitiesProvider;
 
-        private InternalEntitiesProvider EntitiesProvider
+        private IInternalEntitiesProvider EntitiesProvider
         {
             get
             {
                 if (_entitiesProvider is null)
                 {
-                    _entitiesProvider = provider.GetService(typeof(InternalEntitiesProvider)) as InternalEntitiesProvider;
+                    _entitiesProvider = provider.GetService<IInternalEntitiesProvider>();
                 }
 
                 return _entitiesProvider;

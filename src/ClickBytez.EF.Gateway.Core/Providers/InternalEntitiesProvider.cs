@@ -1,4 +1,5 @@
-﻿using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
+﻿using ClickBytez.EF.Gateway.Core.Abstractions;
+using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using ClickBytez.EF.Gateway.Core.Configuration;
 using ClickBytez.EF.Gateway.Core.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace ClickBytez.EF.Gateway.Core.Providers
 {
-    internal class InternalEntitiesProvider
+    internal class InternalEntitiesProvider : IInternalEntitiesProvider
     {
         #region Fields
 
@@ -55,5 +56,10 @@ namespace ClickBytez.EF.Gateway.Core.Providers
         }
 
         #endregion Properties
+
+        public Type[] GetEntities()
+        {
+            return AvailableEntities;
+        }
     }
 }

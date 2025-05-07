@@ -27,7 +27,7 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
             return resultActionInstance;
         }
 
-        internal static IAction<IEntity> CreateInstance(JObject jObject, InternalEntitiesProvider provider)
+        internal static IAction<IEntity> CreateInstance(JObject jObject, IInternalEntitiesProvider provider)
         {
             Type entityType = null;
 

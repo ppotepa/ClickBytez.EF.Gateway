@@ -13,7 +13,7 @@ namespace ClickBytez.EF.Gateway.Tests.Serializer
         #region Fields
 
         private readonly ActionJsonConverter _converter;
-        private readonly Mock<InternalEntitiesProvider> _entitiesProviderMock;
+        private readonly Mock<IInternalEntitiesProvider> _entitiesProviderMock;
         private readonly Mock<IServiceProvider> _serviceProviderMock;
 
         #endregion Fields
@@ -23,10 +23,14 @@ namespace ClickBytez.EF.Gateway.Tests.Serializer
         public ActionSerializerTests()
         {
             _serviceProviderMock = new Mock<IServiceProvider>();
-            _entitiesProviderMock = new Mock<InternalEntitiesProvider>();
+            _entitiesProviderMock = new Mock<IInternalEntitiesProvider>();
+
+            _entitiesProviderMock
+               .Setup(provider => provider.AvailableEntities)
+               .Returns([typeof(MockEntity)]);
 
             _serviceProviderMock
-                .Setup(sp => sp.GetService(typeof(InternalEntitiesProvider)))
+                .Setup(serviceProvider => serviceProvider.GetService(typeof(IInternalEntitiesProvider)))
                 .Returns(_entitiesProviderMock.Object);
 
             _converter = new ActionJsonConverter(_serviceProviderMock.Object);
@@ -68,18 +72,14 @@ namespace ClickBytez.EF.Gateway.Tests.Serializer
         [Test]
         public void ReadJson_ValidJson_ReturnsActionInstance()
         {
-            var json = @"{ ""Type"": ""Create"", ""Entity"": { ""Id"": 1 }, ""Filters"": [""filter1""] }";
+            var json = @"{""type"":""create.MockEntity"",""entity"":{""name"":""test""}}";
             var reader = new JsonTextReader(new System.IO.StringReader(json));
             var serializer = new JsonSerializer();
-
-            _entitiesProviderMock
-                .Setup(ep => ep.AvailableEntities)
-                .Returns(new[] { typeof(MockEntity) });
 
             var result = _converter.ReadJson(reader, typeof(IAction<IEntity>), null, false, serializer);
 
             Assert.NotNull(result);
-            Assert.Equals(ActionType.Create, result.Type);
+            Assert.That(result.Type, Is.EqualTo(ActionType.Create));
         }
 
         [Test]

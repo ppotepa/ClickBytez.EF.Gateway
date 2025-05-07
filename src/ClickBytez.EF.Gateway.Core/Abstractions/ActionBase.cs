@@ -17,7 +17,11 @@ namespace ClickBytez.EF.Gateway.Core.Abstractions
         protected ActionBase(JToken token, JToken filters)
         {
             Entity = token.ToObject<TEntity>();
-            Filters = JsonConvert.DeserializeObject<string[]>(filters.ToString());
+
+            if (filters is not null) 
+            {
+                Filters = JsonConvert.DeserializeObject<string[]>(filters?.ToString()) ?? [];
+            }
         }
 
         public abstract ActionType Type { get; }

@@ -6,12 +6,12 @@ namespace ClickBytez.EF.Gateway.Tests.Serializer
     {
         #region Classes
 
-        private class MockEntity : IEntity<int>
+        private class MockEntity : ExtendedEntity<int>
         {
             #region Properties
 
-            public int Id { get; set; }
-            object IEntity.Id { get => Id; set => Id = (int)value; }
+            public int Id { get; set; }            
+            public string Name { get; set; }
 
             #endregion Properties
         }
