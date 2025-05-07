@@ -60,7 +60,7 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
 
             _dbContextMock = new Mock<InMemoryTestsDbContext>() { CallBase = true };
 
-            _controller = new ActionController(_appConfigurationMock.Object);
+            _controller = new ActionController(_appConfigurationMock.Object, _dbContextMock.Object);
             _controller.UseContext(_dbContextMock.Object);
         }
 
