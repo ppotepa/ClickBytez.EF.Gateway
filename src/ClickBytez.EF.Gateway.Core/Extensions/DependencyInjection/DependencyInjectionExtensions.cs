@@ -11,6 +11,8 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
 {
     public static class DependencyInjectionExtensions
     {
+        private static bool _dbCreated;
+
         public static IServiceCollection UseEFGateway(this IServiceCollection @this, Type contextType, IConfiguration configuration)
         {
             @this.AddSingleton<IInternalEntitiesProvider, InternalEntitiesProvider>();
@@ -32,7 +34,14 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
                 try
                 {
                     DbContext dbContext = provider.GetService(contextType) as DbContext;
-                    ActionController controller = ActivatorUtilities.CreateInstance(provider, typeof(ActionController), dbContext) as ActionController;                    
+
+                    if(_dbCreated is false)
+                    {
+                        dbContext.Database.EnsureCreated();
+                        _dbCreated = true;
+                    }
+
+                    ActionController controller = ActivatorUtilities.CreateInstance(provider, typeof(ActionController), dbContext) as ActionController;
                     return controller;
                 }
                 catch (Exception ex)
