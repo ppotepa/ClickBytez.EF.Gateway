@@ -49,7 +49,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
 
                 if (action.Filters.Any())
                 {
-                    resultEntity = data.ApplyRequest(action.Filters);
+                    resultEntity = data.ApplyFiltersRegex(action.Filters);
                     resultCount = Queryable.Count(resultEntity);
                 }
             }
