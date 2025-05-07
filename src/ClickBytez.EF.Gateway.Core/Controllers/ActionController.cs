@@ -18,7 +18,7 @@ namespace ClickBytez.EF.Gateway.Core.Controllers
         private readonly IConfiguration _configuration;
         private DbContext context;
 
-        public ActionController(IConfiguration configuration, ExtendedDbContext context)
+        public ActionController(IConfiguration configuration, DbContext context)
         {
             this._configuration = configuration;
             this.context = context;
