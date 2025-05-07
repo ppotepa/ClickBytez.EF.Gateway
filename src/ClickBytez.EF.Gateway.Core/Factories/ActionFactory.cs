@@ -2,6 +2,7 @@
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
 using ClickBytez.EF.Gateway.Core.Enumerations;
 using ClickBytez.EF.Gateway.Core.Providers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -28,23 +29,39 @@ namespace ClickBytez.EF.Gateway.Core.Extensions.DependencyInjection
 
         internal static IAction<IEntity> CreateInstance(JObject jObject, InternalEntitiesProvider provider)
         {
-            EntityAction action = new EntityAction(jObject["type"].Value<string>());
-            JToken jEntity = jObject["entity"];
-            JToken jFilters = jObject["filters"];
+            Type entityType = null;
 
-            Type entityType = provider.AvailableEntities.FirstOrDefault
-            (
-                entityType => entityType.Name.Equals(action.EntityName, StringComparison.OrdinalIgnoreCase)
-            );
-
-
-            if(entityType is null)
+            try
             {
-                throw new InvalidOperationException($"Entity type {action.EntityName} not found.");
-            }
+                EntityAction action = new EntityAction(jObject["type"].Value<string>());
+                JToken jEntity = jObject["entity"];
+                JToken jFilters = jObject["filters"];
 
-            IAction<IEntity> targetInstance = CreateInternal(action.ActionType, entityType, jEntity, jFilters);
-            return targetInstance;
+                entityType = provider.AvailableEntities.FirstOrDefault
+                (
+                    entityType => entityType.Name.Equals(action.EntityName, StringComparison.OrdinalIgnoreCase)
+                );
+
+                if (entityType is null)
+                {
+                    throw new InvalidOperationException($"Entity type {action.EntityName} not found.");
+                }
+
+                IAction<IEntity> targetInstance = CreateInternal(action.ActionType, entityType, jEntity, jFilters);
+                return targetInstance;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new InvalidOperationException($"Error while resolving entity type: {ex.Message}", ex);
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new InvalidOperationException($"Error while resolving entity type: {ex.Message}", ex);
+            }   
+            catch (JsonSerializationException ex)
+            {
+                throw new JsonSerializationException($"Error while resolving entity type: {ex.Message}", ex);
+            }
         }
     }
 }

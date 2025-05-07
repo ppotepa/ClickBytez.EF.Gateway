@@ -5,7 +5,7 @@ using static ClickBytez.EF.Gateway.Tests.Controller.ActionControllerTests;
 
 namespace ClickBytez.EF.Gateway.Tests.Shared
 {
-    public class TestsDbContext : ExtendedDbContext
+    public class InMemoryTestsDbContext : ExtendedDbContext
     {
         public DbSet<TestEntity> Users { get; set; }
 
@@ -35,7 +35,7 @@ namespace ClickBytez.EF.Gateway.Tests.Shared
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseInMemoryDatabase(nameof(TestsDbContext));
+            optionsBuilder.UseInMemoryDatabase(nameof(InMemoryTestsDbContext));
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

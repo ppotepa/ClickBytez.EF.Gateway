@@ -1,10 +1,12 @@
 using ClickBytez.EF.DemoStore;
 using ClickBytez.EF.Gateway.Core.Configuration;
 using ClickBytez.EF.Gateway.Core.Controllers;
+using ClickBytez.EF.Gateway.Core.Converters;
 using ClickBytez.EF.Gateway.Tests.Shared;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using Newtonsoft.Json;
 
 namespace ClickBytez.EF.Gateway.Tests.Controller
 {
@@ -12,7 +14,7 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
     public partial class ActionControllerTests
     {
         private Mock<IConfiguration> _gatewayConfigurationMock;
-        private Mock<TestsDbContext> _dbContextMock;
+        private Mock<InMemoryTestsDbContext> _dbContextMock;
         private ActionController _controller;
 
         private Mock<IConfigurationSection> _configurationSectionMock;
@@ -56,7 +58,7 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
                     return _configurationSectionMock.Object;
                 });
 
-            _dbContextMock = new Mock<TestsDbContext>() { CallBase = true };
+            _dbContextMock = new Mock<InMemoryTestsDbContext>() { CallBase = true };
 
             _controller = new ActionController(_appConfigurationMock.Object);
             _controller.UseContext(_dbContextMock.Object);
@@ -88,7 +90,7 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
 
             Assert.IsNotNull(result);
             dynamic dynamicResult = result;
-            Assert.IsNotNull(dynamicResult.entity);            
+            Assert.IsNotNull(dynamicResult.entity);
         }
 
         [Test]
@@ -105,32 +107,32 @@ namespace ClickBytez.EF.Gateway.Tests.Controller
 
         [Test]
         public void Execute_UpdateEntityAction_UpdatesEntityInContext()
-        {            
-            var updateAction = new UpdateEntityAction(TestsDbContext.UserToUpdate);
+        {
+            var updateAction = new UpdateEntityAction(InMemoryTestsDbContext.UserToUpdate);
 
             var result = _controller.Execute(updateAction);
 
-            _dbContextMock.Verify(dbContext => dbContext.Update(TestsDbContext.UserToUpdate), Times.Once);
+            _dbContextMock.Verify(dbContext => dbContext.Update(InMemoryTestsDbContext.UserToUpdate), Times.Once);
             _dbContextMock.Verify(dbContext => dbContext.SaveChanges(), Times.Once);
 
             Assert.IsNotNull(result);
             dynamic dynamicResult = result;
-            Assert.AreEqual(TestsDbContext.UserToUpdate, dynamicResult.entity);
+            Assert.AreEqual(InMemoryTestsDbContext.UserToUpdate, dynamicResult.entity);
         }
 
         [Test]
         public void Execute_DeleteEntityAction_RemovesEntityFromContext()
         {
-            var deleteAction = new DeleteEntityAction(TestsDbContext.UserToDelete);
+            var deleteAction = new DeleteEntityAction(InMemoryTestsDbContext.UserToDelete);
             var result = _controller.Execute(deleteAction);
 
-            _dbContextMock.Verify(dbContext => dbContext.Remove(TestsDbContext.UserToDelete), Times.Once);
+            _dbContextMock.Verify(dbContext => dbContext.Remove(InMemoryTestsDbContext.UserToDelete), Times.Once);
             _dbContextMock.Verify(dbContext => dbContext.SaveChanges(), Times.Once);
 
             Assert.IsNotNull(result);
             dynamic dynamicResult = result;
 
-            Assert.AreEqual(TestsDbContext.UserToDelete, dynamicResult.entity);
+            Assert.AreEqual(InMemoryTestsDbContext.UserToDelete, dynamicResult.entity);
             Assert.AreEqual(1, dynamicResult.resultCount);
             Assert.IsTrue(dynamicResult.deleted);
         }
