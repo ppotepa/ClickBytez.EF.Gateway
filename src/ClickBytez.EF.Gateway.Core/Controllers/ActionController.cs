@@ -1,7 +1,7 @@
 ﻿using ClickBytez.EF.DemoStore;
 using ClickBytez.EF.Gateway.Core.Abstractions;
 using ClickBytez.EF.Gateway.Core.Abstractions.Entities;
-using ClickBytez.EF.Gateway.Core.Filters.Queryable;
+using ClickBytez.EF.Gateway.Core.Filters.Querying;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

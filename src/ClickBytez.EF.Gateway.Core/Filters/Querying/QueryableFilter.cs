@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace ClickBytez.EF.Gateway.Core.Filters.Queryable;
+namespace ClickBytez.EF.Gateway.Core.Filters.Querying;
 
 public static class QueryableExtensions
 {
