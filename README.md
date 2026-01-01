@@ -1,6 +1,6 @@
-# ClickBytez.EF.Gateway  
+# PortalZ  
 
-**ClickBytez.EF.Gateway** is an experimental, minimal API built with ASP.NET Core and EF Core. It provides a *single endpoint* that handles CRUD operations for any entity, inspired by GraphQL-style data access.  
+**PortalZ** is an experimental, minimal API built with ASP.NET Core and EF Core. It provides a *single endpoint* that handles CRUD operations for any entity, inspired by GraphQL-style data access.  
 This project is a proof-of-concept and not production-ready — think of it as a learning exercise in building a generic API handler.  
 
 ## How it works  
